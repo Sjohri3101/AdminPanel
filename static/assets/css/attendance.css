@@ -1,0 +1,99 @@
+.tabs {
+    display: flex;
+    cursor: pointer;
+}
+
+.tab {
+    padding: 10px 20px;
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+}
+
+.active {
+    /* background: #2ca67d; */
+    color: black;
+    border-bottom: 1px solid transparent;
+    border-top: 2px solid grey;
+}
+
+.tab-content {
+    display: none;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.show {
+    display: block;
+}
+
+/* calender tab 1 */
+
+.calendar-container {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px; /* Add some padding around the container */
+}
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.month {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    display: block; /* Use block to control width more effectively */
+    width: 100%; /* Full width */
+    max-width: 80%; /* Maximum width */
+    margin: 0 auto; /* Center the month container */
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.day {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #fff;
+    text-align: center;
+    box-sizing: border-box;
+    transition: background-color 0.3s;
+    height: 100px;
+}
+
+
+.current-day {
+    background-color: #dd9a91; /* Highlight color for today */
+    color: white; /* Text color */
+    border-radius: 20px;
+    box-shadow: 2px 2px 10px grey;
+    font-weight: bold;
+    
+}
+
+.weekend {
+    background-color: #e2d5af; /* Warning color for weekends */
+}
+.attendance-item {
+    padding: 5px;
+    border: 1px solid #ccc;
+    margin: 2px;
+}
+
+.no-attendance {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+

@@ -1,0 +1,16 @@
+body {
+    background: #f8f9fa;
+}
+.signup-container {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.signup-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
