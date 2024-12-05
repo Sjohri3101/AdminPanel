@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Customer Panel{% endblock %}</title>
+    <!-- Include any CSS files or stylesheets here -->
+
+    {% block css_style %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/brands.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fontawesome/css/solid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/select2/select2-bootstrap-5-theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/sweetalert2/sweetalert2.min.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/main.css' %}"> -->
+    <!-- <link rel="stylesheet" href="{% static 'assets/datatables/datatables.min.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'assets/datatables/dataTables.bootstrap5.min.css' %}" type="text/css">
+
+    <!-- JavaScripts -->
+    <script src="{% static 'assets/jquery/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'assets/bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/select2/select2.min.js' %}"></script>
+    <script src="{% static 'assets/sweetalert2/sweetalert2.all.min.js' %}"></script>
+
+
+</head>
+
+<body>
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <section id="content">
+        <!-- navbar -->
+        <nav class="d-flex justify-content-between align-items-center">
+            <i class="fa-solid fa-bars d-flex align-items-center justify-content-center"></i>
+            <div class="d-flex align-items-center">
+                <div class="position-relative">
+                    <div class="hover-dropdown">
+                        <i class="fa-solid fa-bell me-3 fs-4" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"></i>
+                        <div class="dropdown-menu bg-light dropdown-menu-start" style="min-width: 300px;">
+                            <div class="dropdown-header">Notifications</div>
+                            <a class="dropdown-item" href="#">New message received</a>
+                            <a class="dropdown-item" href="#">Server downtime alert</a>
+                            <a class="dropdown-item" href="#">New comment on your post</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-center" href="#"><button class="btn btn-sm btn-info text-light"><i class="fa-solid fa-eye"></i> View All</button></a>
+                        </div>
+                    </div>
+                    <span class="position-absolute top-0 start-50 translate-middle badge rounded-circle bg-danger">0</span>
+                </div>
+                <a class="nav-link dropdown-toggle bg-info p-2 rounded text-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Hi, {{request.user.first_name.capitalize}} {{request.user.last_name.capitalize}}</a>
+                <div class="dropdown-menu bg-light">
+                    <a class="dropdown-item" href="{% url 'indexpage' %}"><i class="fa-solid fa-chart-simple"></i> Dashboard</a>
+                    <a class="dropdown-item" href="{% url 'user_profile' %}"><i class="fa-solid fa-users"></i> Profile</a>
+                    <a class="dropdown-item" href="#"><i class="fa-solid fa-user-pen"></i> Edit Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#"><i class="fa-solid fa-bell"></i> Notification</a>
+                    <a class="dropdown-item" href="#"><i class="fa-solid fa-mug-hot"></i> Leaves and Holidays</a>
+                    <a class="dropdown-item" href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'logout_user' %}"><button class="btn btn-sm btn-info me-2 text-light bg-info w-50 ms-3"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></a>
+                </div>
+            </div>
+        </nav>
+        
+
+        <!-- main -->
+        <main>{% block main %}{% endblock %}</main>
+    </section>
+
+    {% block content %}{% endblock %}
+
+
+    <!-- Include any JavaScript files or scripts here -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    
+
+    {% block app_js %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<!-- <div class="head-title">
+        <div class="left">
+            <a href="#"></a>
+            <h1>Dashboard</h1>
+        </div>
+    </div> -->
+
+<div class="card mb-4 bg-light border border-1 w-50">
+    <div class="card-header p-2 ps-4 pe-4 bg-info text-light border-bottom-0">
+        <span class="h5">
+            <span class="badge rounded-pill bg-light"><i class="fa-solid fa-chart-simple"></i> Dashboard</span>
+        </span>
+    </div>
+    <div class="card-body p-0">
+        <br>
+        <p class="d-flex justify-content-center">
+            {% if request.user.profile_image.url %}
+                <img src="{{request.user.profile_image.url}}" alt="" class="img-fluid w-25 h-25 rounded-circle border border-dark" style="border-width: 3px;">
+            {% else %}
+                <img src="{% static 'assets/img/dummy-profile-pic.jpg' %}" alt="" class="img-fluid w-25 h-25 rounded-circle border border-dark" style="border-width: 3px;">
+            {% endif %}
+        </p>
+        <br>
+        <p class="text-center">
+           <span class="fw-bold fs-2 text-success">Welcome</span> <span class="fs-2 text-primary">{{profile.first_name.capitalize|default:""}} {{profile.last_name.capitalize|default:""}}</span>
+        </p>
+        <p class="text-center">
+            <span class="text-dark fw-bold"><i class="fa-solid fa-circle-user"></i> Employee Code : <span class="badge badge-sm rounded-pill bg-danger m-1">{{profile.emp_code|default:""}}</span></span>
+        </p>
+        <p class="text-center">
+            <span class="text-dark fw-bold"><i class="fa-solid fa-envelope"></i> {{profile.email|default:""}}</span>
+        </p>
+        <p class="text-center">
+            <span class="text-dark fw-bold"><i class="fa-solid fa-phone-volume"></i> {{profile.phone_number|default:""}}</span>
+        </p>
+        <p class="text-center">
+            <span class="text-dark fw-bold"><i class="fa-solid fa-calendar-days"></i> Date of Birth : {{profile.date_of_birth|default:""}}</span> 
+        </p>
+        <p class="text-center">
+            <span class="text-dark fw-bold"><i class="fa-solid fa-calendar-days"></i> Date of Joining : {{profile.date_joined|default:""|date:"M. d, Y"}}</span> 
+        </p>
+    </div>
+</div>
+{% endblock %}

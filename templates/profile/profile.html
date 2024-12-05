@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <div class="card bg-light border border-1">
+            <div class="card-header p-2 ps-4 pe-4 bg-info text-light border-bottom-0">
+                <span class="h5">
+                    <span class="badge rounded-pill bg-light"><i class="fa-solid fa-user"></i> My Profile</span>
+                </span>
+                <a href="#" class="btn btn-sm btn-light float-end me-2 fw-bold">
+                    <i class="fa-solid fa-user-pen"></i>&nbsp; Edit
+                </a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table mb-0 table-hover">
+                    <tbody>
+                        <tr>
+                            <td rowspan="6">
+                                <p class="d-flex justify-content-center">
+                                    <img src="{% static 'assets/img/dummy-profile-pic.jpg' %}" alt=""
+                                        class="img-fluid rounded-circle border border-dark" style="border-width: 3px;">
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold bg-secondary" colspan="4"><i class="fa-solid fa-circle-info"></i> Basic
+                                Details
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Employee Code</td>
+                            <td colspan="3"><span class="badge badge-sm rounded-pill bg-danger m-1">{{user_detail.emp_code|default:""}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Name</td>
+                            <td>{{user_detail.first_name.capitalize|default:""}} {{user_detail.last_name.capitalize|default:""}}</td>
+
+                            <td class="fw-bold">Email</td>
+                            <td>{{user_detail.email|default:""}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Contact</td>
+                            <td>{{user_detail.phone_number|default:""}}</td>
+
+                            <td class="fw-bold">Gender</td>
+                            <td>{{user_detail.gender|default:""}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Blood Group</td>
+                            <td>{{user_profile.blood_group|default:""}}</td>
+                            <td class="fw-bold">Date of Birth</td>
+                            <td>{{user_detail.date_of_birth|default:""}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 mb-3">
+        <div class="card bg-light border border-1">
+            <div class="card-header p-2 ps-4 pe-4 bg-info text-light border-bottom-0">
+                <span class="h5">
+                    <span class="badge rounded-pill bg-light"><i class="fa-solid fa-graduation-cap"></i>
+                        Qualification Details</span>
+                </span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table mb-0">
+                    <tbody>
+                        <tr>
+                            <td colspan="5">
+                                <div class="container mt-4">
+                                    <div class="row">
+                                        {% for qualification in user_qualification %}
+                                        <div class="col-md-4 mb-4"> <!-- Adjust column size as needed -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">
+                                                        <span class="badge badge-sm rounded-pill bg-primary m-1">{{ qualification.degree|default:"Not Available" }}</span>
+                                                    </h5>
+                                                    <div class="row border border-2">
+                                                        <div class="col-md-5"><strong>Stream</strong></div>
+                                                        <div class="col-md-7">{{ qualification.stream|default:"Not Available" }}</div>
+                                                    </div>
+                                                    <div class="row border border-2">
+                                                        <div class="col-md-5"><strong>Start Year</strong></div>
+                                                        <div class="col-md-7">{{ qualification.start_year|default:"Not Available" }}</div>
+                                                    </div>
+                                                    <div class="row border border-2">
+                                                        <div class="col-md-5"><strong>End Year</strong></div>
+                                                        <div class="col-md-7">{{ qualification.end_year|default:"Not Available" }}</div>
+                                                    </div>
+                                                    <div class="row border border-2">
+                                                        <div class="col-md-5"><strong>University / College / School</strong></div>
+                                                        <div class="col-md-7">{{ qualification.school|default:"Not Available" }}</div>
+                                                    </div>
+                                                    <div class="row border border-2">
+                                                        <div class="col-md-5"><strong>Marks Obtained</strong></div>
+                                                        <div class="col-md-7">{{ qualification.marks_obtained|default:"Not Available" }}</div>
+                                                    </div>
+                                                    <div class="row border border-2">
+                                                        <div class="col-md-5"><strong>Total Marks</strong></div>
+                                                        <div class="col-md-7">{{ qualification.total_marks|default:"Not Available" }}</div>
+                                                    </div>
+                                                    <div class="row border border-2">
+                                                        <div class="col-md-5"><strong>Percentage</strong></div>
+                                                        <div class="col-md-7">{{ qualification.percentage|default:"Not Available" }} %</div>
+                                                    </div>
+                                                    <div class="row border border-2">
+                                                        <div class="col-md-5"><strong>Division</strong></div>
+                                                        <div class="col-md-7">{{ qualification.division|default:"Not Available" }}</div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 mb-3">
+        <div class="card bg-light border border-1">
+            <div class="card-header p-2 ps-4 pe-4 bg-info text-light border-bottom-0">
+                <span class="h5">
+                    <span class="badge rounded-pill bg-light"><i class="fa-brands fa-slack"></i> Skills</span>
+                </span>
+            </div>
+            <div class="card-body p-2">
+                {% for skill in user_skill %}
+                    <span class="badge badge-sm rounded-pill bg-primary m-1">{{skill.skill|default:"Not Available"}}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 mb-3">
+        <div class="card bg-light border border-1">
+            <div class="card-header p-2 ps-4 pe-4 bg-info text-light border-bottom-0">
+                <span class="h5">
+                    <span class="badge rounded-pill bg-light"><i class="fa-solid fa-people-roof"></i> Family Info</span>
+                </span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table mb-0 table-hover">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">Marital Status</td>
+                            <td colspan="4">{{user_profile.marital_status|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Spouse Name</td>
+                            <td colspan="4">{{user_profile.spouse_name|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Children</td>
+                            <td colspan="4">{{user_profile.no_of_children|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Child 1 Name</td>
+                            <td colspan="4">{{user_profile.child_one_name|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Child 1 Age</td>
+                            <td colspan="4">{{user_profile.child_one_age|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Child 2 Name</td>
+                            <td colspan="4">{{user_profile.child_two_name|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Child 2 Age</td>
+                            <td colspan="4">{{user_profile.child_one_age|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Permanent Address</td>
+                            <td colspan="4">{{user_profile.permanent_address|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Current Address</td>
+                            <td colspan="4">{{user_profile.current_address|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Alternate Email</td>
+                            <td colspan="4">{{user_profile.alternate_email|default:"Not Available"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Alternate Contact</td>
+                            <td colspan="4">{{user_profile.alternate_contact|default:"Not Available"}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</div>
+</div>
+
+{% endblock %}

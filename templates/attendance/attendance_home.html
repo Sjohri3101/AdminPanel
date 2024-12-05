@@ -1,0 +1,590 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css_style %}
+<link rel="stylesheet" href="{% static 'assets/css/attendance.css' %}">
+<link rel="stylesheet" href="{% static 'assets/flatpickr/flatpickr.min.css' %}">
+{% endblock %}
+
+{% block main %}
+<!-- <div class="head-title">
+        <div class="left">
+            <a href="#"></a>
+            <h1>Dashboard</h1>
+        </div>
+    </div> -->
+
+<div class="card mb-4 bg-light border border-1 w-100">
+    <div class="card-header p-2 ps-4 pe-4 bg-info text-light border-bottom-0">
+        <span class="h5">
+            <span class="badge rounded-pill bg-light"><i class="fa-solid fa-chart-simple"></i> Attendance</span>
+        </span>
+    </div>
+    <div class="card-body text-center">
+        <div class="row">
+            <div class="mb-4 col-md-12">
+                <h2 class="fw-bold text-success">Welcome, <span class="text-primary">{{ employee_detail.first_name|capfirst }} {{employee_detail.last_name|capfirst }}</span></h2>
+                <!-- <img src="{% static 'assets/img/dummy-profile-pic.jpg' %}" alt="Profile Picture"
+                    class="img-fluid rounded-circle border border-dark"
+                    style="border-width: 3px; width: 150px; height: 150px;"> -->
+            </div>
+            <div class="col-md-1">
+                <span class="text-dark fw-bold">
+                    <img src="{% static 'assets/img/dummy-profile-pic.jpg' %}" alt="Profile Picture"
+                    class="img-fluid rounded-circle border border-dark"
+                    style="border-width: 3px; width: 50px; height: 50px;">
+                </span>
+            </div>
+
+            <div class="mt-2 col-md-3">
+                <span class="text-dark fw-bold">
+                    <i class="fa-solid fa-circle-user"></i> Employee Code:
+                    <span class="badge bg-danger">{{ employee_detail.emp_code }}</span>
+                </span>
+            </div>
+
+            <div class="mt-2 col-md-3">
+                <span class="text-dark fw-bold">
+                    <i class="fa-solid fa-envelope"></i> {{ employee_detail.email }}
+                </span>
+            </div>
+
+            <div class="mt-2 col-md-2">
+                <span class="text-dark fw-bold">
+                    <i class="fa-solid fa-phone-volume"></i> {{ employee_detail.phone_number }}
+                </span>
+            </div>
+
+            <div class="mt-2 col-md-3">
+                <span class="text-dark fw-bold">
+                    <i class="fa-solid fa-calendar-days"></i> Date of Birth: {{ employee_detail.date_of_birth }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tabs">
+    <div class="tab active" onclick="showTab('tab1')">My Attendance</div>
+    <div class="tab" onclick="showTab('tab2')">Modify Attendance</div>
+    <div class="tab" onclick="showTab('tab3')">View Status</div>
+</div>
+
+<div id="tab1" class="tab-content show">
+    <div class="container calendar-container">
+        <div class="row justify-content-center">
+            <div class="d-inline-flex justify-content-left w-auto">
+                <div style="background-color: #7bfb7b; color: black; font-weight: bold; width:40px; height: 20px"></div>
+                <span class="ms-2">Present</span>
+            </div>
+            <div class="d-flex justify-content-left w-auto">
+                <div style="background-color: red; color: black; font-weight: bold; width:40px; height: 20px;"></div>
+                <span class="ms-2">Absent</span>
+            </div>
+            <div class="d-flex justify-content-left w-auto">
+                <div style="background-color: pink; color: black; font-weight: bold; width:40px; height: 20px;"></div>
+                <span class="ms-2">Overtime</span>
+            </div>
+            <div class="d-flex justify-content-left w-auto">
+                <div style="background: linear-gradient(to left, #7bfb7b, red); color: black; font-weight: bold; width:40px; height: 20px;"></div>
+                <span class="ms-2">First Half</span>
+            </div>
+            <div class="d-flex justify-content-left w-auto">
+                <div style="background: linear-gradient(to right, #7bfb7b, red); color: black; font-weight: bold; width:40px; height: 20px;"></div>
+                <span class="ms-2">Second Half</span>
+            </div>
+            <div class="d-flex justify-content-left w-auto">
+                <div style="background: linear-gradient(to left, #7bfb7b, #7b82fb); color: black; font-weight: bold; width:40px; height: 20px;"></div>
+                <span class="ms-2">Late IN</span>
+            </div>
+            <div class="d-flex justify-content-left w-auto">
+                <div style="background: linear-gradient(to right, #7bfb7b, #7b82fb); color: black; font-weight: bold; width:40px; height: 20px;"></div>
+                <span class="ms-2">Early OUT</span>
+            </div>
+            <div class="d-flex justify-content-left w-auto">
+                <div style="background-color: #e7e770; color: black; font-weight: bold; width:40px; height: 20px;"></div>
+                <span class="ms-2">Leave</span>
+            </div>
+            <div class="d-flex justify-content-left w-auto">
+                <div style="background-color: #b9b7b3; color: black; font-weight: bold; width:40px; height: 20px;"></div>
+                <span class="ms-2">Week Off</span>
+            </div>
+        </div>
+
+        <div class="header d-flex justify-content-between align-items-center mt-5 w-50 m-auto">
+            <button id="prevButton" class="btn btn-primary"><i class="fa-solid fa-angles-left"></i></button>
+            <h2 id="monthYear" class="mx-3"></h2>
+            <button id="nextButton" class="btn btn-primary"><i class="fa-solid fa-angles-right"></i></button>
+        </div>
+
+        <div class="month" id="calendar">
+            <div class="header">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+            <div class="days" id="days">
+                {% for attendance in attendance_data %}
+                    <div class="attendance-item">{{ attendance }}</div>
+                {% empty %}
+                    <div class="no-attendance">No attendance data available.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="tab2" class="tab-content">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-center">Select Date Range</h4>
+                <form method="POST" action="" id="date-range-form">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="mb-3 col-md-4">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="date" id="start_date" name="start_date" class="form-control" placeholder="{{now|date:'Y-m-d'}}" required>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="date" id="end_date" name="end_date" class="form-control" placeholder="{{now|date:'Y-m-d'}}" required>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="attendance_type" class="form-label">Attendance Type</label>
+                            <select id="attendance_type" name="attendance_type" class="form-select" required>
+                                <option value="" disabled selected>-- Select --</option>
+                                <option value="On Duty">On Duty</option>
+                                <option value="Miss Punch">Miss Punch</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="reset" class="btn btn-danger">Reset</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Result Container -->
+                {% comment %} <h4 class="card-title text-center">Modify Attendance</h4> {% endcomment %}
+                
+
+                <!-- Form for modifying attendance -->
+                <div id="modifyattendance-container" class="d-none">
+                    <form id="modifyattendance" method="post">
+                        {% csrf_token %}
+                        <div id="result-container" class="d-none"></div>
+                        <button type="submit" id="final-submit" class="btn btn-success">Final Submit</button>
+                        <button type="reset" id="final-reset" class="btn btn-danger">Reset</button>
+                    </form>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="tab3" class="tab-content">
+    <div class="container mt-5">
+        <h1>Modified Attendance Status</h1>
+        <table class="table table-striped w-100" id="attendancedataTable">
+            <thead>
+                <tr class="bg-primary">
+                    <th>Request ID</th>
+                    <th>Employee Name</th>
+                    <th>Employee Code</th>
+                    <th>Attendance Date</th>
+                    <th>Attendance Type</th>
+                    <th>Applied Date</th>
+                    <th>Status</th>
+                    <th>Modified IN Time</th>
+                    <th>Modified OUT Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for modified_attendance in modified_attendance%}
+                <tr>
+                    <td>{{modified_attendance.request_id}}</td>
+                    <td>{{modified_attendance.request_employee.first_name}} {{modified_attendance.request_employee.last_name}}</td>
+                    <td>{{modified_attendance.request_employee.emp_code}}</td>
+                    <td>{{modified_attendance.date}}</td>
+                    <td>{{modified_attendance.attendance_type}}</td>
+                    <td>{{modified_attendance.modified_at}}</td>
+                    <td>{{modified_attendance.status}}</td>
+                    <td>{{modified_attendance.check_in_time}}</td>
+                    <td>{{modified_attendance.check_out_time}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block app_js %}
+<script type="text/javascript" src="{% static 'assets/datatables/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/datatables/dataTables.bootstrap5.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/flatpickr/flatpickr.min.js' %}"></script>
+
+<script>
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    const todayDate = new Date(); // Today's full date
+    const today = todayDate.getDate(); // Today's day
+
+    const attendanceData = {
+        {% for attendance in attendance_data %}
+            "{% autoescape off %}{{ attendance.date|date:'Y-m-d' }}{% endautoescape %}": {
+                style: "{% if attendance.status == 'Present' %}background-color: #7bfb7b; color: black; font-weight: bold;{% elif attendance.status == 'Absent' %}background-color: red; color: white; font-weight: bold;{% elif attendance.status == 'Leave' %}background-color: #e7e770; color: black; font-weight: bold;{% elif attendance.status == 'Week Off' %}background-color: #b9b7b3; color: black; font-weight: bold;{% elif attendance.status == 'First Half' %}background: linear-gradient(to left, #7bfb7b, red); color: black; font-weight: bold;{% elif attendance.status == 'Late IN' %}background: linear-gradient(to left, #7bfb7b, #7b82fb); color: black; font-weight: bold;{% elif attendance.status == 'Early OUT' %}background: linear-gradient(to left, #7b82fb, #7bfb7b); color: black; font-weight: bold;{% elif attendance.status == 'Overtime' %}background-color: pink; color: black; font-weight: bold;{% else %}background: linear-gradient(to right, #7bfb7b, red); color: black; font-weight: bold;{% endif %}",
+                
+                {% comment %} status: "{% if attendance.status == 'Present' %}Present{% elif attendance.status == 'Absent' %}Absent{% elif attendance.status == 'Leave' %}Leave{% elif attendance.status == 'Week Off' %}Week Off{% elif attendance.status == 'First Half' %}First Half{% elif attendance.status == 'Late IN' %}Late IN{% elif attendance.status == 'Early OUT' %}Early OUT{% elif attendance.status == 'Overtime' %}Overtime{% else %}Second Half{% endif %}", {% endcomment %}
+                
+                duration: "{% if attendance.status == 'Week Off' or attendance.total_duration == '' %}{% else %}{{ attendance.total_duration}}{% endif %}",
+
+                check_in: "{% if attendance.status == 'Week Off' or attendance.check_in_time == '' %}{% else %}{{ attendance.check_in_time}}{% endif %}",
+                check_out: "{% if attendance.status == 'Week Off' or attendance.check_out_time == '' %}{% else %}{{ attendance.check_out_time}}{% endif %}"
+            }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    };
+
+    function generateCalendar(month, year) {
+        const $daysDiv = $('#days');
+        const $monthYearDiv = $('#monthYear');
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const firstDay = new Date(year, month, 1).getDay();
+
+        // Clear previous calendar days
+        $daysDiv.empty();
+
+        // Set the month and year heading
+        $monthYearDiv.text(`${getMonthName(month)} ${year}`);
+
+        // Create empty slots for days before the first day of the month
+        for (let i = 0; i < firstDay; i++) {
+            $daysDiv.append('<div class="day empty"></div>');
+        }
+
+        // Create days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const $dayDiv = $('<div class="day"></div>').text(day);
+
+            // Highlight current date
+            if (day === today && month === todayDate.getMonth() && year === todayDate.getFullYear()) {
+                $dayDiv.addClass('current-day');
+                $dayDiv.append('<div class="today-label text-dark">Today</div>'); // Add "Today" label
+            }
+
+            // Highlight weekends
+            const dayOfWeek = new Date(year, month, day).getDay();
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                $dayDiv.addClass('weekend');
+            }
+
+            // Integrate attendance data
+            const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            if (attendanceData[dateString]) {
+                $dayDiv.attr('style', attendanceData[dateString].style); // Apply the inline style
+            
+                // Assuming attendanceData[dateString] has properties: status, duration, check_in, check_out
+                const attendanceInfo = attendanceData[dateString];
+                const $attendanceDiv = $('<div class="attendance"></div>').html(`
+                    {% comment %} ${attendanceInfo.status}<br> {% endcomment %}
+                    {% comment %} {% if attendance.status != 'Week Off' or attendance.check_in_time and attendance.check_out_time %}
+                        (${attendanceInfo.check_in || ''}&nbsp;-&nbsp;${attendanceInfo.check_out || ''})
+                    {% elif attendance.status == 'Leave' or not attendance.check_in_time and not attendance.check_out_time %}
+                        -
+                    {% elif attendance.status == 'Week Off' %}
+                        ${attendanceInfo.status}
+                    {% endif %} {% endcomment %}
+                    <br>
+                    {% if attendance.status != 'Week Off' or attendance.total_duration %}
+                        ${attendanceInfo.duration || ''}
+                    {% endif %}
+                `);
+                $attendanceDiv.css({
+                    color: 'black', // Set text color to black
+                    fontSize: '14px' // Set font size to small
+                });
+            
+                $dayDiv.append($attendanceDiv);
+            }
+
+            $daysDiv.append($dayDiv);
+        }
+    }
+
+    function getMonthName(month) {
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        return monthNames[month];
+    }
+
+    // Event listeners for buttons
+    $('#prevButton').on('click', () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11; // wrap to December
+            currentYear--;
+        }
+        generateCalendar(currentMonth, currentYear);
+    });
+
+    $('#nextButton').on('click', () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0; // wrap to January
+            currentYear++;
+        }
+        generateCalendar(currentMonth, currentYear);
+    });
+
+    // Initial calendar generation
+    generateCalendar(currentMonth, currentYear);
+</script>
+
+<script>
+    function showTab(tabId) {
+        // Hide all tab content
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => {
+            content.classList.remove('show');
+        });
+
+        // Remove active class from all tabs
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Show the selected tab content
+        document.getElementById(tabId).classList.add('show');
+
+        // Set the clicked tab as active
+        event.currentTarget.classList.add('active');
+    }
+
+    $(document).ready(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#attendancedataTable').DataTable({
+            scrollX: true,
+            order: [[0, 'desc']],
+            displayLength: 10,
+            language: {
+                searchPlaceholder: "Request ID, Status...",
+                sSearch: ""
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        // Keep the date inputs standard
+        $('#start_date').flatpickr({
+            dateFormat: "Y-m-d"
+        });
+        
+        $('#end_date').flatpickr({
+            dateFormat: "Y-m-d"
+        });
+    
+        // Assuming you have a hidden field with employee ID
+        const employeeId = "{{ request.user.id }}"; 
+    
+        $('#date-range-form').on('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            // Clear previous results
+            $('#result-container').empty();
+    
+            // Show the attendance modification form
+            $('#modifyattendance-container').removeClass('d-none');
+    
+            // Add headers to the result container
+            const headers = `
+                <div class="row mb-2">
+                    <div class="col-md-2"><strong>Select</strong></div>
+                    <div class="col-md-2"><strong>Date</strong></div>
+                    <div class="col-md-2"><strong>In Time</strong></div>
+                    <div class="col-md-2"><strong>Out Time</strong></div>
+                    <div class="col-md-2"><strong>Attendance Type</strong></div>
+                    <div class="col-md-2"><strong>Total Duration</strong></div>
+                </div>
+            `;
+            $('#result-container').append(headers);
+    
+            const startDate = new Date($('#start_date').val());
+            const endDate = new Date($('#end_date').val());
+    
+            for (let dt = new Date(startDate); dt <= endDate; dt.setDate(dt.getDate() + 1)) {
+                const dateString = dt.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+                const attendanceType = $('#attendance_type').val();
+    
+                const row = `
+                    <div class="row mb-2">
+                        <div class="col-md-2 d-flex justify-content-center">
+                            <input type="checkbox" class="day-checkbox" name="attendance_ids" data-id="${dateString}" checked>
+                        </div>
+                        <div class="col-md-2">
+                            <span name='dates'>${dateString}</span>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="time" class="form-control in-time" name='check_in_times' placeholder="In Time" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="time" class="form-control out-time" name='check_out_times' placeholder="Out Time" required>
+                        </div>
+                        <div class="col-md-2">
+                            <span name='dates'>${attendanceType}</span>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control total-duration" placeholder="Total Duration" readonly>
+                        </div>
+                    </div>
+                `;
+                $('#result-container').append(row);
+            }
+    
+            // Show the result container
+            $('#result-container').removeClass('d-none');
+    
+            $('.in-time, .out-time').on('change', function() {
+                const row = $(this).closest('.row');
+                const inTime = row.find('.in-time').val();
+                const outTime = row.find('.out-time').val();
+                const totalDurationField = row.find('.total-duration');
+    
+                if (inTime && outTime) {
+                    const inTimeDate = new Date(`1970-01-01T${inTime}:00`);
+                    const outTimeDate = new Date(`1970-01-01T${outTime}:00`);
+                    let duration = (outTimeDate - inTimeDate) / (1000 * 60); // Duration in minutes
+    
+                    if (duration < 0) {
+                        totalDurationField.val("Invalid Time");
+                    } else {
+                        const hours = Math.floor(duration / 60);
+                        const minutes = duration % 60;
+                        totalDurationField.val(`${hours}h ${minutes}m`);
+                    }
+                } else {
+                    totalDurationField.val(''); // Clear if either time is not set
+                }
+            });
+        });
+    
+        $('#final-submit').on('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            const attendanceData = []; // Initialize as an array
+    
+            const attendanceType = $('#attendance_type').val(); // Get the selected attendance type
+    
+            $('.day-checkbox:checked').each(function() {
+                const row = $(this).closest('.row');
+                const attendanceId = $(this).data('id'); // Use data-id for attendance ID
+                const checkInTime = row.find('.in-time').val();
+                const checkOutTime = row.find('.out-time').val();
+                const date = row.find('.col-md-2:nth-child(2)').text().trim().replace(/\n/g, '');
+    
+                // Validation for check-in and check-out times
+                if (!checkInTime) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Enter Check IN Time',
+                        text: `Please enter the check-in time for the date: ${date}`,
+                    });
+                    return false; // Break out of the each loop
+                }
+    
+                if (!checkOutTime) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Enter Check Out Time',
+                        text: `Please enter the check-out time for the date: ${date}`,
+                    });
+                    return false; // Break out of the each loop
+                }
+    
+                // Store the necessary data in the array along with employee ID and attendance type
+                attendanceData.push({
+                    employeeId: employeeId,
+                    date: date,
+                    checkInTime: checkInTime,
+                    checkOutTime: checkOutTime,
+                    attendanceType: attendanceType // Include attendance type
+                });
+            });
+    
+            // Check if we have any data to send
+            if (attendanceData.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No Attendance Selected',
+                    text: 'Please select at least one attendance record to update.',
+                });
+                return;
+            } else {
+                console.log("Attendance data -- ", attendanceData);
+                $.ajax({
+                    url: '{% url "update_attendance" %}',  // Adjust URL to your modification view
+                    method: 'POST',
+                    data: {
+                        attendance_data: JSON.stringify(attendanceData), // Convert to JSON
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    beforeSend: function() {
+                        $('#final-submit').html('<span class="spinner-border spinner-border-sm" role="status"></span> Processing...').prop('disabled', true);
+                    },
+                    success: function(response) {
+                        console.log('Response --- ', response);
+                        if (response.status) {
+                            Swal.fire({
+                                icon: "success",
+                                title: 'Success!',
+                                text: 'Attendance modification request created successfully!',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: 'Error!',
+                                text: response.message || 'An error occurred. Please try again.',
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: "error",
+                            title: 'Error!',
+                            text: xhr.responseJSON?.message || 'An unexpected error occurred.',
+                        });
+                    },
+                    complete: function() {
+                        $('#final-submit').html('Submit').prop('disabled', false);
+                    }
+                });
+            }
+        });
+    
+        // Final Reset button click event
+        $('#final-reset').on('click', function() {
+            $('#result-container').empty();
+            $('#modifyattendance-container').addClass('d-none');
+            $('#date-range-form')[0].reset(); // Reset the date range form specifically
+        });
+    });
+    
+    
+    
+    
+</script>
+
+{% endblock %}

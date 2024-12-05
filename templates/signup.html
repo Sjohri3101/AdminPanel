@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Form</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/signup.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/sweetalert2/sweetalert2.min.css' %}">
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-title text-center text-light fw-bold bg-info rounded shadow">Sign Up | New User</div>
+        <form id="signupuser" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.first_name }}
+                        <label for="floatingFirstName">First Name</label>
+                    </div>  
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.last_name }}
+                        <label for="floatingLastName">Last Name</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.username }}
+                        <label for="floatingEmail">Email</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.phone_number }}
+                        <label for="floatingPhone">Contact</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.date_of_birth }}
+                        <label for="floatingDOB">Date of Birth</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.gender }}
+                        <label for="floatingGender">Select Gender</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.password }}
+                        <label for="floatingPassword">Password</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        {{ form.confirm_password }}
+                        <label for="floatingConfirmPassword">Re-enter Password</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-info w-100 mt-3" id="signupbtn">Sign Up</button>
+        </form>
+        
+        <div class="text-center mt-3">
+            <span>Already have an account? <a href="{% url 'indexpage' %}" class="text-primary">Login</a></span>
+        </div>
+    </div>
+
+    <!-- JS Files -->
+    <script src="{% static 'assets/jquery/jquery-3.7.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/jquery-validate/jquery.validate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/jquery-validate/additional-methods.min.js' %}"></script>
+    <script src="{% static 'assets/sweetalert2/sweetalert2.all.min.js' %}"></script>
+    <script src="{% static 'assets/bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#signupuser").validate({
+                rules: {
+                    first_name: { required: true, normalizer: value => $.trim(value) },
+                    last_name: { required: true, normalizer: value => $.trim(value) },
+                    date_of_birth: { required: true, normalizer: value => $.trim(value) },
+                    gender: { required: true, normalizer: value => $.trim(value) },
+                    username: { required: true, normalizer: value => $.trim(value) },
+                    phone_number: { required: true, normalizer: value => $.trim(value) },
+                    password: { required: true, normalizer: value => $.trim(value) },
+                    confirm_password: { required: true, normalizer: value => $.trim(value) }
+                },
+                messages: {
+                    first_name: { required: 'First Name Required!!' },
+                    last_name: { required: 'Last Name Required!!' },
+                    date_of_birth: { required: 'Date of Birth Required!!' },
+                    gender: { required: 'Select Gender Required!!' },
+                    username: { required: 'Username Required!!' },
+                    phone_number: { required: 'Phone Number Required!!' },
+                    password: {
+                                required: 'Password Required!!',
+                                minlength: 'Password must be at least 8 characters long.',
+                                pattern: 'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+                            },
+                    confirm_password: {
+                                required: 'Confirm Password Required!!',
+                                equalTo: 'Passwords do not match.'
+                            }
+                },
+                submitHandler: function (form) {
+                    $.ajax({
+                        url: "{% url 'signup_process' %}",
+                        method: 'POST',
+                        data: $(form).serialize(),
+                        beforeSend: function() {
+                            $('#signupbtn').html('<span class="spinner-border spinner-border-sm" role="status"></span> Processing...').prop('disabled', true);
+                        },
+                        success: function (response) {
+                            $('#signupbtn').html('Successfully Registered').attr('disabled', false);
+                            if (response.status) {
+                                Swal.fire({ icon: "success", title: response.message });  // Adjusted from Toast to Swal
+                                setTimeout(function() {
+                                    window.location.href = "{% url 'indexpage' %}";
+                                }, 2000); 
+                            } else {
+                                show_error_msg('#id_', response.errors);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

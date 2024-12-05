@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css_style %}
+<link rel="stylesheet" href="{% static 'assets/css/attendance.css' %}">
+<link rel="stylesheet" href="{% static 'assets/flatpickr/flatpickr.min.css' %}">
+
+{% endblock %}
+
+{% block main %}
+<!-- <div class="head-title">
+        <div class="left">
+            <a href="#"></a>
+            <h1>Dashboard</h1>
+        </div>
+    </div> -->
+
+<div class="card mb-4 bg-light border border-1 w-100">
+    <div class="card-header p-2 ps-4 pe-4 bg-info text-light border-bottom-0">
+        <span class="h5">
+            <span class="badge rounded-pill bg-light"><i class="fa-solid fa-chart-simple"></i> Attendance</span>
+        </span>
+    </div>
+    <div class="card-body text-center">
+        <div class="row">
+            <div class="mb-4 col-md-12">
+                <h2 class="fw-bold text-success">Welcome, <span class="text-primary">{{ employee_detail.first_name|capfirst }} {{employee_detail.last_name|capfirst }}</span></h2>
+                <!-- <img src="{% static 'assets/img/dummy-profile-pic.jpg' %}" alt="Profile Picture"
+                    class="img-fluid rounded-circle border border-dark"
+                    style="border-width: 3px; width: 150px; height: 150px;"> -->
+            </div>
+            <div class="col-md-1">
+                <span class="text-dark fw-bold">
+                    <img src="{% static 'assets/img/dummy-profile-pic.jpg' %}" alt="Profile Picture"
+                    class="img-fluid rounded-circle border border-dark"
+                    style="border-width: 3px; width: 50px; height: 50px;">
+                </span>
+            </div>
+
+            <div class="mt-2 col-md-3">
+                <span class="text-dark fw-bold">
+                    <i class="fa-solid fa-circle-user"></i> Employee Code:
+                    <span class="badge bg-danger">{{ employee_detail.emp_code }}</span>
+                </span>
+            </div>
+
+            <div class="mt-2 col-md-3">
+                <span class="text-dark fw-bold">
+                    <i class="fa-solid fa-envelope"></i> {{ employee_detail.email }}
+                </span>
+            </div>
+
+            <div class="mt-2 col-md-2">
+                <span class="text-dark fw-bold">
+                    <i class="fa-solid fa-phone-volume"></i> {{ employee_detail.phone_number }}
+                </span>
+            </div>
+
+            <div class="mt-2 col-md-3">
+                <span class="text-dark fw-bold">
+                    <i class="fa-solid fa-calendar-days"></i> Date of Birth: {{ employee_detail.date_of_birth }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tabs">
+    <div class="tab active" onclick="showTab('tab1')">My Leaves</div>
+    <div class="tab" onclick="showTab('tab2')">Apply Leave</div>
+    <div class="tab" onclick="showTab('tab3')">Applied Leave Status</div>
+    <div class="tab" onclick="showTab('tab4')">Holidays</div>
+</div>
+
+<div id="tab1" class="tab-content show">
+    <div class="container mt-5">
+        <h1>Leave Details</h1>
+        <table class="table table-striped w-100" id="leaveTable">
+            <thead>
+                <tr class="bg-primary">
+                    <th>Employee Code</th>
+                    <th>Department</th>
+                    <th>Leave Type</th>
+                    <th>Total Leaves</th>
+                    <th>Remaining Leaves</th>
+                    <th>Used Leaves</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leaves in leaves_data %}
+                <tr>
+                    <td>{{leaves.employee.emp_code}}</td>
+                    <td>{{leaves.department.department_name}}</td>
+                    <td>{{leaves.leave_type}}</td>
+                    <td>{{leaves.total_leaves}}</td>
+                    <td>{{leaves.remaining_leaves}}</td>
+                    <td>{{leaves.used_leaves}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="tab2" class="tab-content">
+    <div class="container">
+        <h1 class="mt-5">Leave Application Form</h1>
+        <form class="mt-4" method="POST" action="" id="leaveform">
+            {% csrf_token %}
+            <div class="row">
+                <div class="form-group col-md-4 mb-3">
+                    <label for="id_from_date">Select From Date:</label>
+                    {{form.from_date}}
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <label for="id_to_date">Select To Date:</label>
+                    {{form.to_date}}
+                </div>
+                <div class="form-group col-md-4 md-3">
+                    <label for="id_leave_type">Select Leave Type:</label>
+                    {{form.leave_type}}
+                </div>
+                <div class="col-md-12 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary" id="leavesubmit">Submit</button>&nbsp;
+                    <button type="reset" class="btn btn-danger">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="tab3" class="tab-content">
+    <div class="container mt-5">
+        <h1>Applied Leaves</h1>
+        <table class="table table-striped" id="AppliedleaveTable">
+            <thead class="w-100">
+                <tr class="bg-primary">
+                    <th>Request ID</th>
+                    <th>Employee Code</th>
+                    <th>Apply Date</th>
+                    <th>Leave Type</th>
+                    <th>From</th>
+                    <th>Till</th>
+                    <th>Days</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leaves_request in leaves_request_data %}
+                <tr>
+                    <td>{{leaves_request.pk}}</td>
+                    <td>{{leaves_request.employee.emp_code}}</td>
+                    <td>{{leaves_request.leave_apply_date}}</td>
+                    <td>{{leaves_request.leave_type}}</td>
+                    <td>{{leaves_request.from_date}}</td>
+                    <td>{{leaves_request.to_date}}</td>
+                    <td>{{leaves_request.no_of_days}}</td>
+                    <td>{{leaves_request.status}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="tab4" class="tab-content">
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center fw-bold">Holidays {{current_year}}</h2>
+        <table class="table table-striped table-hover">
+            <thead class="bg-primary text-light fs-5">
+                <tr>
+                    <th scope="col">S.No.</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Holiday</th>
+                    <th scope="col">Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for holiday in holidays %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{holiday.date}}</td>
+                        <td>{{holiday.holiday}}</td>
+                        <td>{{holiday.year}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block app_js %}
+<script type="text/javascript" src="{% static 'assets/datatables/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/datatables/dataTables.bootstrap5.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/jquery-validate/jquery.validate.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/jquery-validate/additional-methods.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/flatpickr/flatpickr.min.js' %}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#leaveTable').DataTable({
+            scrollX: true,
+            order: [[0, 'desc']],
+            displayLength: 10,
+            language: {
+                searchPlaceholder: "Leave Type...",
+                sSearch: ""
+            }
+        });
+    });
+    $(document).ready(function() {
+        $('#AppliedleaveTable').DataTable({
+            scrollX: true,
+            order: [[0, 'desc']],
+            displayLength: 10,
+            language: {
+                searchPlaceholder: "Leave Type...",
+                sSearch: ""
+            }
+        });
+    });
+</script>
+
+<script>
+    function showTab(tabId) {
+        // Hide all tab content
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => {
+            content.classList.remove('show');
+        });
+
+        // Remove active class from all tabs
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Show the selected tab content
+        document.getElementById(tabId).classList.add('show');
+
+        // Set the clicked tab as active
+        event.currentTarget.classList.add('active');
+    }
+
+    $(document).ready(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#id_from_date').flatpickr({
+            dateFormat: "Y-m-d"
+        });
+        $('#id_to_date').flatpickr({
+            dateFormat: "Y-m-d"
+        });
+        
+        $("#leaveform").validate({
+            rules: {
+                date: { required: true, normalizer: value => $.trim(value) },
+                leave_type: { required: true, normalizer: value => $.trim(value) }
+            },
+            messages: {
+                date: { required: 'Leave Date is Required!!' },
+                leave_type: { required: 'Select Valid Leave type!!' }
+            },
+            submitHandler: function (form) {
+                $.ajax({
+                    url: "{% url 'apply_leave_process' %}",
+                    method: 'POST',
+                    data: $(form).serialize(),
+                    beforeSend: function() {
+                        $('#leavesubmit').html('<span class="spinner-border spinner-border-sm" role="status"></span> Processing...').prop('disabled', true);
+                    },
+                    success: function (response) {
+                        $('#leavesubmit').html('Leave Successfully Applied').attr('disabled', false);
+                        if (response.status) {
+                            Swal.fire({ icon: "success", title: response.message });  // Adjusted from Toast to Swal
+                            setTimeout(function() {
+                                window.location.href = "{% url 'leaves_holidays' %}";
+                            }, 5000); 
+                        } else {
+                            show_error_msg('#id_', response.errors);
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% load static %}
+
+<section id="sidebar">
+    <div class="d-flex flex-column align-items-center p-2">
+        <img src="{% static 'assets/img/dummy-profile-pic.jpg' %}" alt="" class="img-fluid w-50 h-50 rounded-circle border border-dark" style="border-width: 3px;">   
+        <p class="text-center text-primary fw-bolder">Hi, {{request.user.first_name.capitalize}} {{request.user.last_name.capitalize}}</p>
+    </div>
+    <ul class="side-menu top">
+        <li class="nav-link">
+            <a href="{% url 'home' %}">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span class="text">Home</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="{% url 'user_profile' %}">
+                <i class="fa-solid fa-users"></i>
+                <span class="text">My Profile</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="{% url 'attendance_home' %}">
+                <i class="fa-solid fa-clipboard-user"></i>
+                <span class="text">Attendance</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="{% url 'leaves_holidays' %}">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span class="text">Leaves and Holidays</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="#">
+                <i class="fa-solid fa-receipt"></i>
+                <span class="text">Payslip</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="#">
+                <i class="fa-solid fa-folder-open"></i>
+                <span class="text">My Documents</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="#">
+                <i class="fa-solid fa-cannabis"></i>
+                <span class="text">Referrals</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="#">
+                <i class="fa-solid fa-pen-nib"></i>
+                <span class="text">Tax</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="#">
+                <i class="fa-brands fa-stack-overflow"></i>
+                <span class="text">Reports</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="#">
+                <i class="fa-solid fa-handshake"></i>
+                <span class="text">Appraisal</span>
+            </a>
+        </li>
+        <li class="nav-link">
+            <a href="{% url 'alert_home' %}">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span class="text">Alerts</span>
+            </a>
+        </li>
+        <!-- <li class="nav-link">
+            <a href="#" class="btn btn-sm btn-info me-2 text-light bg-info w-75"><i
+                    class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </li> -->
+    </ul>
+</section>
